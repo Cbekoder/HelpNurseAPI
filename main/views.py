@@ -25,16 +25,18 @@ class NurseServiceAPIView(APIView):
         nurse_services = NurseService.objects.filter(nurse=nurse).values_list('service', flat=True)
         services = Service.objects.exclude(id__in=nurse_services)
         serializer = ServiceSerializer(services, many=True)
+        print(serializer.data)
         return Response(serializer.data)
 
 class HospitalServiceAPIView(APIView):
     def get(self, request, service, hospital):
-        nurse = Hospital.objects.get(id=hospital)
+        hospital = Hospital.objects.get(id=hospital)
         service = Service.objects.get(id=service)
         HospitalService.objects.create(hospital=hospital, service=service)
         hospital_services = HospitalService.objects.filter(hospital=hospital).values_list('service', flat=True)
         services = Service.objects.exclude(id__in=hospital_services)
         serializer = ServiceSerializer(services, many=True)
+        print(serializer.data)
         return Response(serializer.data)
 
 class HospitalServiceViewSet(viewsets.ModelViewSet):
